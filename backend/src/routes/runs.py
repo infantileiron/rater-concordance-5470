@@ -10,7 +10,7 @@ router=APIRouter(prefix="/runs")
 @router.get("")
 def listing(db=Depends(db_session),user=Depends(current_user)):return rows(db.scalars(select(AgreementRun).order_by(AgreementRun.created_at.desc())))
 @router.post("")
-def create(payload:RunInput,db=Depends(db_session),user=Depends(writer)):return service.create(db,payload.study_id)
+def create(payload:RunInput,db=Depends(db_session),user=Depends(writer)):return service.create(db,payload)
 @router.get("/{id}")
 def detail(id:str,db=Depends(db_session),user=Depends(current_user)):
  item=db.get(AgreementRun,id)

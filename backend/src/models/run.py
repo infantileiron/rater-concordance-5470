@@ -8,4 +8,8 @@ class AgreementRun(Base):
  status:Mapped[str]=mapped_column(String)
  result:Mapped[dict]=mapped_column(JSON,default=dict)
  error:Mapped[str]=mapped_column(Text,default="")
+ # 区间分析设置；历史运行该三列为NULL，保持原有点估计结果
+ confidence_level:Mapped[float|None]=mapped_column(Float,nullable=True)
+ resamples:Mapped[int|None]=mapped_column(Integer,nullable=True)
+ seed:Mapped[int|None]=mapped_column(Integer,nullable=True)
  created_at:Mapped[str]=mapped_column(String)

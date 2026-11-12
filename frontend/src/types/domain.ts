@@ -5,9 +5,11 @@ export interface Dataset{id:string;name:string;source:string;raters:string[];tas
 export interface Scale{id:string;name:string;levels:Level[];created_at:string}
 export interface Study{id:string;name:string;dataset_id:string;scale_id:string;rater_ids:string[];created_at:string}
 export interface Pair{rater_a:string;rater_b:string;kappa:number|null;reason:string;n:number;matrix:number[][];marginal_a:number[];marginal_b:number[];observed_disagreement:number|null;expected_disagreement:number|null;exact_agreement:number|null}
+export interface IntervalBlock{lower:number|null;upper:number|null;estimable_resamples:number;not_estimable_resamples:number;reason:string}
+export interface IntervalResult{confidence_level:number;resamples:number;seed:number;method:string;quantile_method:string;tasks_resampled:number;kendall:IntervalBlock;pairs:IntervalBlock[];mean_pair_kappa:IntervalBlock;checksum:string|null;note:string[]}
 export interface Disagreement{task_id:string;group:string;codes:Record<string,string>;span:number;mean_pair_distance:number}
-export interface Result{raters:string[];levels:Level[];tasks_total:number;tasks_complete:number;tasks_isolated:number;isolated:{task_id:string;missing_raters:string[];reason:string}[];kendall:{value:number|null;reason:string;n:number;m:number;tie_correction:number;denominator:number;rank_sums:number[];ranks:number[][]};pairs:Pair[];estimable_pairs:number;mean_pair_kappa:number|null;disagreements:Disagreement[];rank_profile:{task_id:string;ranks:number[]}[];checksum:string;assumptions:string[]}
-export interface Run{id:string;study_id:string;status:string;result:Result;error:string;created_at:string}
+export interface Result{raters:string[];levels:Level[];tasks_total:number;tasks_complete:number;tasks_isolated:number;isolated:{task_id:string;missing_raters:string[];reason:string}[];kendall:{value:number|null;reason:string;n:number;m:number;tie_correction:number;denominator:number;rank_sums:number[];ranks:number[][]};pairs:Pair[];estimable_pairs:number;mean_pair_kappa:number|null;disagreements:Disagreement[];rank_profile:{task_id:string;ranks:number[]}[];checksum:string;assumptions:string[];interval?:IntervalResult}
+export interface Run{id:string;study_id:string;status:string;result:Result;error:string;confidence_level?:number|null;resamples?:number|null;seed?:number|null;created_at:string}
 export interface Review{id:string;run_id:string;note:string;decision:string;author:string;created_at:string}
 export interface Report{id:string;run_id:string;title:string;published_by:string;created_at:string}
 export interface Audit{id:string;actor:string;action:string;status:number;created_at:string}

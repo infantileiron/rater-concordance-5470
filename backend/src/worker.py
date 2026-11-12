@@ -13,7 +13,9 @@ def execute(id):
   run.status="running";db.commit()
   try:
    study=db.get(AgreementStudy,run.study_id);dataset=db.get(RatingDataset,study.dataset_id);scale=db.get(RatingScale,study.scale_id)
-   run.result=analyze(dataset.tasks,study.rater_ids,scale.levels);run.status="completed"
+   # 三列均为NULL表示升级前的历史运行口径，仅做点估计，保留原结果结构
+   options=None if run.resamples is None else {"confidence_level":run.confidence_level,"resamples":run.resamples,"seed":run.seed}
+   run.result=analyze(dataset.tasks,study.rater_ids,scale.levels,options);run.status="completed"
   except Exception as e:run.error=str(e);run.status="failed";traceback.print_exc()
   db.commit()
 with Session() as db:

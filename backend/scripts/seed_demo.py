@@ -22,7 +22,7 @@ def seed():
   if not db.get(RatingDataset,"demo-data"):db.add(RatingDataset(id="demo-data",name="松庭盲评·120任务四评委",source="songting_blind_ratings_202611.json",raters=raters,tasks=tasks,created_at=now()));db.flush()
   if not db.get(RatingScale,"demo-scale"):db.add(RatingScale(id="demo-scale",name="任务质量·五级有序标尺v1",levels=levels,created_at=now()));db.flush()
   if not db.get(AgreementStudy,"demo-study"):db.add(AgreementStudy(id="demo-study",name="四评委·盲评一致性复核",dataset_id="demo-data",scale_id="demo-scale",rater_ids=raters,created_at=now()));db.flush()
-  if not db.get(AgreementRun,"demo-run"):db.add(AgreementRun(id="demo-run",study_id="demo-study",status="completed",result=analyze(tasks,raters,levels),error="",created_at=now()));db.flush()
+  if not db.get(AgreementRun,"demo-run"):db.add(AgreementRun(id="demo-run",study_id="demo-study",status="completed",result=analyze(tasks,raters,levels,{"confidence_level":0.95,"resamples":1000,"seed":20261112}),error="",confidence_level=0.95,resamples=1000,seed=20261112,created_at=now()));db.flush()
   if not db.get(PanelReview,"demo-review"):db.add(PanelReview(id="demo-review",run_id="demo-run",note="4项缺评分任务已整行隔离，W与全部6对kappa共用116项完整任务。评委丁偏严需结合分歧任务复核，不据指标自动评价人员。",decision="accepted",author="analyst@songting.demo",created_at=now()));db.flush()
   if not db.get(Report,"demo-report"):db.add(Report(id="demo-report",run_id="demo-run",title="松庭盲评·评分标尺校准卷宗",published_by="admin@songting.demo",created_at=now()))
   db.commit();return {m.__tablename__:db.scalar(select(func.count()).select_from(m)) for m in (User,RatingDataset,RatingScale,AgreementStudy,AgreementRun,PanelReview,Report)}
